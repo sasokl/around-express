@@ -7,7 +7,7 @@ const dataPath = path.join(__dirname, '../', '/data/users.json');
 usersRouter.get('/users', (req, res) => {
   fs.readFile(dataPath, { encoding: 'utf8' }, (err, data) => {
     if (err) {
-      res.status(404);
+      res.status(500);
       res.send({ message: 'Requested resource not found' });
       return;
     }
@@ -20,7 +20,7 @@ usersRouter.get('/users', (req, res) => {
 usersRouter.get('/users/:id', (req, res) => {
   fs.readFile(dataPath, { encoding: 'utf8' }, (err, data) => {
     if (err) {
-      res.status(404);
+      res.status(500);
       res.send({ message: 'Requested resource not found' });
       return;
     }
