@@ -9,7 +9,14 @@ module.exports.createCard = (req, res) => {
 
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(500).send({ message: `Error: ${err}` }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400);
+      } else {
+        res.status(500);
+      }
+      res.send({ message: `Error: ${err}` });
+    });
 };
 
 module.exports.deleteCard = (req, res) => Card.findByIdAndDelete(req.params.cardId)
@@ -19,7 +26,14 @@ module.exports.deleteCard = (req, res) => Card.findByIdAndDelete(req.params.card
     throw error;
   })
   .then((card) => res.send({ data: card }))
-  .catch((err) => res.status(err.statusCode ? err.statusCode : 500).send({ message: `Error: ${err}` }));
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(400);
+    } else {
+      res.status(500);
+    }
+    res.send({ message: `Error: ${err}` });
+  });
 
 module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
@@ -32,7 +46,14 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
     throw error;
   })
   .then((card) => res.send({ data: card }))
-  .catch((err) => res.status(err.statusCode ? err.statusCode : 500).send({ message: `Error: ${err}` }));
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(400);
+    } else {
+      res.status(500);
+    }
+    res.send({ message: `Error: ${err}` });
+  });
 
 module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   req.params.cardId,
@@ -45,4 +66,11 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
     throw error;
   })
   .then((card) => res.send({ data: card }))
-  .catch((err) => res.status(err.statusCode ? err.statusCode : 500).send({ message: `Error: ${err}` }));
+  .catch((err) => {
+    if (err.name === 'CastError') {
+      res.status(400);
+    } else {
+      res.status(500);
+    }
+    res.send({ message: `Error: ${err}` });
+  });
